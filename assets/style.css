@@ -1,0 +1,21 @@
+body {
+    margin: 4em;
+    font-family: 'Open Sans';
+    color: rgb(50, 50, 50);
+    background-color: rgb(242, 242, 242);
+}
+div.card {
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgb(249, 249, 249);
+    box-shadow: rgb(211, 211, 211) 2px 2px 2px 0px;
+}
+h3 {
+    margin: 0;
+    font-weight: 300;
+}
+div.table {
+    height: 250px;
+    padding: 0;
+    margin: 0;
+}
