@@ -19,14 +19,12 @@ class OAuth2Server:
             <br/><h3>You can close this window</h3>"""
         self.failure_html = """
             <h1>ERROR: %s</h1><br/><h3>You can close this window</h3>%s"""
-
         self.fitbit = Fitbit(
             client_id,
             client_secret,
             redirect_uri=redirect_uri,
             timeout=10,
         )
-
         self.redirect_uri = redirect_uri
 
     def browser_authorize(self):
@@ -42,7 +40,6 @@ class OAuth2Server:
         urlparams = urlparse(self.redirect_uri)
         cherrypy.config.update({'server.socket_host': urlparams.hostname,
                                 'server.socket_port': urlparams.port})
-
         cherrypy.quickstart(self)
 
     @cherrypy.expose
@@ -79,14 +76,15 @@ class OAuth2Server:
             threading.Timer(1, cherrypy.engine.exit).start()
 
 
-if __name__ == '__main__':
-
+def get_oauth_token():
+    """Get a new token"""
     with open('secrets.json', 'rt') as f:
-        secrets = json.load(f)
+        old_secrets = json.load(f)
 
-    server = OAuth2Server(client_id=secrets['client_id'],
-                          client_secret=secrets['client_secret'])
+    server = OAuth2Server(client_id=old_secrets['client_id'],
+                          client_secret=old_secrets['client_secret'])
     server.browser_authorize()
+    new_secrets = server.fitbit.client.session.token
 
     with open('secrets.json', 'wt') as f:
-        json.dump({**secrets, **server.fitbit.client.session.token}, f)
+        json.dump({**old_secrets, **new_secrets}, f)

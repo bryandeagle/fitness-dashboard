@@ -1,4 +1,4 @@
-from utils import template, layout
+from utils import template, layout, get_oauth_token
 import plotly.io as pio
 import dash
 import os
@@ -14,4 +14,5 @@ app.layout = layout
 
 
 if __name__ == '__main__':
+    get_oauth_token()
     app.run_server(host='0.0.0.0', debug=False)
