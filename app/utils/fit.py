@@ -96,6 +96,8 @@ class Fit:
                        client_secret=self.secrets['client_secret'])
         self.token = server.fitbit.client.session.token
 
+        print('TOKEN={}'.format(self.token))
+
         # Initialize Fitbit client
         self.client = fitbit.Fitbit(client_secret=self.secrets['client_secret'],
                                     refresh_token=self.token['refresh_token'],
