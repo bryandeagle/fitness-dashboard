@@ -1,8 +1,46 @@
-from utils import line, bar, calendar
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_core_components as dcc
+import plotly.graph_objects as go
+import plotly.express as px
 from . import get_data
+
+
+def calendar(data, column, title):
+    """A heatmap calendar showing exercise"""
+    data = data.tail(7 * 15)  # Get last 15 weeks
+    x = [int(i.strftime('%V')) for i in data.index]
+    y = [i.weekday() for i in data.index]
+    text = [i.strftime('%m/%d') for i in data.index]
+    data = [
+        go.Heatmap(
+            x=x,
+            y=y,
+            z=data[column],
+            text=text,
+            hoverinfo='text',
+            xgap=4,
+            ygap=4,
+            colorscale='Viridis'
+        )
+    ]
+    layout = go.Layout(
+        title=title,
+        yaxis=dict(
+            showgrid=False,
+            tickmode='array',
+            ticktext=['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'],
+            tickvals=[0, 1, 2, 3, 4, 5, 6],
+        ),
+        xaxis=dict(
+            title='',
+            tickmode='array',
+            tickvals=[],
+            showline=False
+        )
+    )
+    heatmap = go.Figure(data=data, layout=layout)
+    return heatmap
 
 
 def layout():
@@ -26,9 +64,11 @@ def layout():
                     html.Div(
                         dcc.Graph(
                             id='body-weight',
-                            figure=line(data=df,
-                                        column='Weight',
-                                        title='Body Weight (Lbs)')
+                            figure=px.line(df.tail(30),
+                                           x=df.tail(30).index,
+                                           y='Weight',
+                                           title='Body Weight (Lbs)',
+                                           line_shape='spline')
                         ),
                         className='card p-2'
                     ),
@@ -39,9 +79,10 @@ def layout():
                     html.Div(
                         dcc.Graph(
                             id='weight-delta',
-                            figure=bar(data=df,
-                                       column='Delta',
-                                       title='Daily Weight Loss/Gain (Lbs)')
+                            figure=px.bar(df.tail(30),
+                                          x=df.tail(30).index,
+                                          y='Delta',
+                                          title='Daily Weight Loss/Gain (Lbs)')
                         ),
                         className='card p-2'
                     ),
@@ -56,9 +97,11 @@ def layout():
                     html.Div(
                         dcc.Graph(
                             id='body-fat',
-                            figure=line(data=df,
-                                        column='Fat',
-                                        title='Body Fat (%)')
+                            figure=px.line(df.tail(30),
+                                           x=df.tail(30).index,
+                                           y='Fat',
+                                           title='Body Fat (%)',
+                                           line_shape='spline')
                         ),
                         className='card p-2'
                     ),
@@ -69,9 +112,11 @@ def layout():
                     html.Div(
                         dcc.Graph(
                             id='body-bmi',
-                            figure=line(data=df,
-                                        column='Bmi',
-                                        title='Body Mass Index (BMI)')
+                            figure=px.line(df.tail(30),
+                                           x=df.tail(30).index,
+                                           y='Bmi',
+                                           title='Body Mass Index (BMI)',
+                                           line_shape='spline')
                         ),
                         className='card p-2'
                     ),
