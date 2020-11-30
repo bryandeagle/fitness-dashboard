@@ -128,5 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Pycharm
+.idea/
+
 # Secrets file
 secrets.json
