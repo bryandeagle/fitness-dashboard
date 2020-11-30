@@ -14,5 +14,5 @@ app.layout = layout
 
 
 if __name__ == '__main__':
-    #get_oauth_token()
-    #app.run_server(host='0.0.0.0', debug=False)
+    get_oauth_token()
+    app.run_server(host='0.0.0.0', debug=False)
