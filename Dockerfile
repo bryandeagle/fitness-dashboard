@@ -1,6 +1,5 @@
-FROM jfloff/alpine-python:latest
-RUN apk upgrade
-RUN apk add libxml2-dev libxslt-dev
+FROM ubuntu:latest
+RUN apt-get update && apt-get install libxml2-dev libxslt-dev
 COPY app /app
 WORKDIR /app
 RUN python3 -m pip install --upgrade pip
