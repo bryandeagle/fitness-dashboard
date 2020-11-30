@@ -15,4 +15,5 @@ app.layout = layout
 
 
 if __name__ == '__main__':
+    print('APPLICATION STARTED')
     app.run_server(host='0.0.0.0', debug=False)
