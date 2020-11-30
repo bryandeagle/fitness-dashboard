@@ -81,10 +81,14 @@ def get_oauth_token():
     with open('secrets.json', 'rt') as f:
         old_secrets = json.load(f)
 
+    print('READING SECRETS FILE: {}'.format(old_secrets))
+
     server = OAuth2Server(client_id=old_secrets['client_id'],
                           client_secret=old_secrets['client_secret'])
     server.browser_authorize()
     new_secrets = server.fitbit.client.session.token
+
+    print('WRITING SECRETS FILE: {}'.format(new_secrets))
 
     with open('secrets.json', 'wt') as f:
         json.dump({**old_secrets, **new_secrets}, f)
