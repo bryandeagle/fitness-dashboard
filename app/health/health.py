@@ -17,8 +17,7 @@ import sys
 
 
 class OAuth:
-    def __init__(self, client_id, client_secret,
-                 redirect_uri='http://127.0.0.1:8081/'):
+    def __init__(self, client_id, client_secret, redirect_uri):
         """ Initialize the FitbitOauth2Client """
         self.success_html = """
             <h1>You are now authorized to access the Fitbit API!</h1>
@@ -35,15 +34,15 @@ class OAuth:
         url, _ = self.fitbit.client.authorize_token_url()
 
         # Open the web browser in a new thread for command-line browser support
-        #threading.Timer(1, webbrowser.open, args=(url,)).start()
-        print('Please visit: {}'.format(url))
+        print('Visit: {}'.format(url))
 
         # Same with redirect_uri hostname and port
         urlparams = urlparse(self.redirect_uri)
         cherrypy.config.update({'server.socket_host': urlparams.hostname,
                                 'server.socket_port': urlparams.port,
-                                'log.screen': False})
-        cherrypy.quickstart(self, config={'/': {'tools.gzip.on': False}})
+                                'log.screen': False,
+                                'checker.on': False})
+        cherrypy.quickstart(self)
 
     @cherrypy.expose
     def index(self, state, code=None, error=None):
@@ -81,15 +80,16 @@ class OAuth:
 
 class Health:
     """Nice class to organize Fitbit API"""
-    def __init__(self, client_id, client_secret, user_id, hostname):
+    def __init__(self, client_id, client_secret, user_id, redirect_uri):
         self.client_id = client_id
         self.client_secret = client_secret
         self.user_id = user_id
-        self.hostname = hostname
+        self.redirect_uri = redirect_uri
 
         # Get token
         server = OAuth(client_id=self.client_id,
-                       client_secret=self.client_secret)
+                       client_secret=self.client_secret,
+                       redirect_uri=self.redirect_uri)
         self.token = server.fitbit.client.session.token
 
         # Initialize Fitbit client
@@ -98,7 +98,7 @@ class Health:
                                     refresh_token=self.token['refresh_token'],
                                     access_token=self.token['access_token'],
                                     expires_at=self.token['expires_at'],
-                                    redirect_uri='http://localhost/',
+                                    redirect_uri=redirect_uri,
                                     refresh_cb=self.refresh)
 
     def refresh(self, new_token):

@@ -59,9 +59,9 @@ template = dict(
 def calendar(data, column, weeks, title):
     """ Heatmap calendar similar to Github's """
     data = data.tail(7 * weeks)
-    x = [int(i.strftime('%V')) for i in data.index]
-    y = [i.weekday() for i in data.index]
-    text = [i.strftime('%m/%d') for i in data.index]
+    x = [int(i.strftime('%V')) for i in data.Date]
+    y = [i.weekday() for i in data.Date]
+    text = [i.strftime('%m/%d') for i in data.Date]
     data = [
         go.Heatmap(
             x=x,
@@ -218,14 +218,12 @@ def layout():
     )
 
 
-CONFIG_FILE = 'config.json'
-
 # Default template from utils/template.py
 pio.templates['dashboard'] = template
 pio.templates.default = 'dashboard'
 
 # Load config file an initialize Health API
-with open(CONFIG_FILE, 'rt') as f:
+with open('config.json', 'rt') as f:
     health = Health(**json.load(f))
 
 # Use Bootstrap 5 and initiatlize app
