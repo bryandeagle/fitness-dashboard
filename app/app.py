@@ -10,6 +10,9 @@ import json
 import dash
 import os
 
+import logging
+import logging.handlers
+
 
 PERIOD = '6m'  # 1d, 7d, 30d, 1w, 1m, 3m, 6m, 1y, or max
 RESOURCES = ['body/bmi',
@@ -233,5 +236,16 @@ app.layout = layout
 
 
 if __name__ == '__main__':
-    print('WATERMELON')
+    
+    my_logger = logging.getLogger('MyLogger')
+    my_logger.setLevel(logging.DEBUG)
+
+    handler = logging.handlers.SysLogHandler(address = '/dev/log')
+
+    my_logger.addHandler(handler)
+
+    my_logger.debug('this is debug')
+    my_logger.critical('this is critical')
+
+
     app.run_server(host='0.0.0.0', port=8080, debug=False)
