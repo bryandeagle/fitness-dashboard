@@ -40,7 +40,7 @@ class OAuth:
         # Same with redirect_uri hostname and port
         cherrypy.config.update({'server.socket_host': '0.0.0.0',
                                 'server.socket_port': 8080,
-                                'log.screen': True,
+                                'log.screen': False,
                                 'checker.on': False})
         cherrypy.quickstart(self)
 
