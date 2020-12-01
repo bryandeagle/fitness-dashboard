@@ -132,4 +132,4 @@ dmypy.json
 .idea/
 
 # Secrets file
-secrets.json
+*.json
