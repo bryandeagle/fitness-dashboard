@@ -217,14 +217,15 @@ def layout():
         )]
     )
 
-HOSTNAME = '127.0.0.1'
+
+CONFIG_FILE = 'config.json'
 
 # Default template from utils/template.py
 pio.templates['dashboard'] = template
 pio.templates.default = 'dashboard'
 
-# Load secrets file an initialize Health API
-with open('secrets.json', 'rt') as f:
+# Load config file an initialize Health API
+with open(CONFIG_FILE, 'rt') as f:
     health = Health(**json.load(f))
 
 # Use Bootstrap 5 and initiatlize app
