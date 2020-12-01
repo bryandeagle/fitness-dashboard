@@ -1,5 +1,5 @@
-Dashboard
-=========
+Fitness Dashboard
+=================
 
 A light-weight dashboard project for displaying Fitbit data
 
