@@ -17,7 +17,8 @@ import sys
 
 
 class OAuth:
-    def __init__(self, client_id, client_secret, redirect_uri):
+    def __init__(self, client_id, client_secret,
+                 redirect_uri='http://127.0.0.1:8081/'):
         """ Initialize the FitbitOauth2Client """
         self.success_html = """
             <h1>You are now authorized to access the Fitbit API!</h1>
@@ -34,8 +35,8 @@ class OAuth:
         url, _ = self.fitbit.client.authorize_token_url()
 
         # Open the web browser in a new thread for command-line browser support
-        threading.Timer(1, webbrowser.open, args=(url,)).start()
-        #print('Please visit: {}'.format(url))
+        #threading.Timer(1, webbrowser.open, args=(url,)).start()
+        print('Please visit: {}'.format(url))
 
         # Same with redirect_uri hostname and port
         urlparams = urlparse(self.redirect_uri)
@@ -88,8 +89,7 @@ class Health:
 
         # Get token
         server = OAuth(client_id=self.client_id,
-                       client_secret=self.client_secret,
-                       redirect_uri='http://{}:8080'.format(hostname))
+                       client_secret=self.client_secret)
         self.token = server.fitbit.client.session.token
 
         # Initialize Fitbit client
@@ -98,7 +98,7 @@ class Health:
                                     refresh_token=self.token['refresh_token'],
                                     access_token=self.token['access_token'],
                                     expires_at=self.token['expires_at'],
-                                    redirect_uri='http://{}/'.format(hostname),
+                                    redirect_uri='http://localhost/',
                                     refresh_cb=self.refresh)
 
     def refresh(self, new_token):
