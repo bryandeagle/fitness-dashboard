@@ -9,22 +9,16 @@ import webbrowser
 import threading
 import traceback
 import cherrypy
+import random
 import fitbit
 import json
 import json
 import sys
 
 
-RESOURCES = ['body/bmi',
-             'body/fat',
-             'body/weight',
-             'activities/tracker/calories',
-             'activities/tracker/distance']
-
-
 class OAuth:
     def __init__(self, client_id, client_secret,
-                 redirect_uri='http://127.0.0.1:8080/'):
+                 redirect_uri='http://localhost:8080/'):
         """ Initialize the FitbitOauth2Client """
         self.success_html = """
             <h1>You are now authorized to access the Fitbit API!</h1>
@@ -39,14 +33,17 @@ class OAuth:
         )
         self.redirect_uri = redirect_uri
         url, _ = self.fitbit.client.authorize_token_url()
-        # Open the web browser in a new thread for command-line browser support
-        threading.Timer(1, webbrowser.open, args=(url,)).start()
 
-        # Same with redirect_uri hostname and port.
+        # Open the web browser in a new thread for command-line browser support
+        # threading.Timer(1, webbrowser.open, args=(url,)).start()
+        print('Please visit: {}'.format(url))
+
+        # Same with redirect_uri hostname and port
         urlparams = urlparse(self.redirect_uri)
         cherrypy.config.update({'server.socket_host': urlparams.hostname,
-                                'server.socket_port': urlparams.port})
-        cherrypy.quickstart(self)
+                                'server.socket_port': urlparams.port,
+                                'log.screen': False})
+        cherrypy.quickstart(self, config={'/': {'tools.gzip.on': False}})
 
     @cherrypy.expose
     def index(self, state, code=None, error=None):
@@ -82,60 +79,41 @@ class OAuth:
             threading.Timer(1, cherrypy.engine.exit).start()
 
 
-class Fit:
+class Health:
     """Nice class to organize Fitbit API"""
-    def __init__(self):
-        self.period = '6m'
+    def __init__(self, client_id, client_secret, user_id, hostname='localhost'):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.user_id = user_id
+        self.hostname = hostname
 
-        # Open self.secrets JSON file
-        with open('secrets.json', 'rt') as f:
-            self.secrets = json.load(f)
-
-        # Get a token from oauth as a global
-        server = OAuth(client_id=self.secrets['client_id'],
-                       client_secret=self.secrets['client_secret'])
+        # Get token
+        server = OAuth(client_id=self.client_id,
+                       client_secret=self.client_secret,
+                       redirect_uri='http://localhost:8080')
         self.token = server.fitbit.client.session.token
 
-        print('TOKEN={}'.format(self.token))
-
         # Initialize Fitbit client
-        self.client = fitbit.Fitbit(client_secret=self.secrets['client_secret'],
+        self.client = fitbit.Fitbit(client_id=self.client_id,
+                                    client_secret=self.client_secret,
                                     refresh_token=self.token['refresh_token'],
                                     access_token=self.token['access_token'],
                                     expires_at=self.token['expires_at'],
-                                    client_id=self.secrets['client_id'],
-                                    redirect_uri='http://localhost/',
-                                    refresh_cb=self.refresh_cb)
+                                    redirect_uri='http://{}/'.format(hostname),
+                                    refresh_cb=self.refresh)
 
-    def refresh_cb(self, new_token):
+    def refresh(self, new_token):
         self.token = new_token
 
-    def get_resource(self, resource):
+    def get_data(self, resource, period):
         results = self.client.time_series(resource=resource,
-                                          user_id=self.secrets['user_id'],
+                                          user_id=self.user_id,
                                           base_date='today',
-                                          period=self.period)
+                                          period=period)
 
         # Get key name and proper name from resource
         key = resource.replace('/', '-')
         name = resource.split('/')[-1].capitalize()
 
-        data = [{'Date': datetime.strptime(x['dateTime'], '%Y-%m-%d'),
+        return [{'Date': datetime.strptime(x['dateTime'], '%Y-%m-%d'),
                  name: float(x['value'])} for x in results[key]]
-
-        # Convert list of dicts into dataframe
-        df = pd.DataFrame(data)
-        df.columns = ['Date', name]
-        df.set_index('Date', inplace=True)
-        return df
-
-
-fitbit_api = Fit()
-
-
-def get_data():
-    df = fitbit_api.get_resource(RESOURCES[0])
-    for resource in RESOURCES[1:]:
-        df = df.merge(fitbit_api.get_resource(resource), on='Date')
-    df['Delta'] = df['Weight'].diff(1)
-    return df
