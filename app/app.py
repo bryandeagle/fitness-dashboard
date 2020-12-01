@@ -220,6 +220,7 @@ def layout():
         )]
     )
 
+print('WATERMELON')
 
 # Default template from utils/template.py
 pio.templates['dashboard'] = template
@@ -236,7 +237,6 @@ app.layout = layout
 
 
 if __name__ == '__main__':
-    
     my_logger = logging.getLogger('MyLogger')
     my_logger.setLevel(logging.DEBUG)
 
