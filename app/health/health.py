@@ -38,8 +38,8 @@ class OAuth:
 
         # Same with redirect_uri hostname and port
         urlparams = urlparse(self.redirect_uri)
-        cherrypy.config.update({'server.socket_host': urlparams.hostname,
-                                'server.socket_port': urlparams.port,
+        cherrypy.config.update({'server.socket_host': 'localhost',  # urlparams.hostname,
+                                'server.socket_port': '8080',  # urlparams.port,
                                 'log.screen': True,
                                 'checker.on': False})
         cherrypy.quickstart(self)
