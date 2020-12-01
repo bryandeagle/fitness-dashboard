@@ -34,8 +34,7 @@ class OAuth:
         url, _ = self.fitbit.client.authorize_token_url()
 
         # Open the web browser in a new thread for command-line browser support
-        with open('url', 'wt') as f:
-            f.write(url)
+        print(url)
 
         # Same with redirect_uri hostname and port
         cherrypy.config.update({'server.socket_host': '0.0.0.0',
@@ -91,7 +90,7 @@ class Health:
                        client_secret=self.client_secret,
                        redirect_uri=self.redirect_uri)
         self.token = server.fitbit.client.session.token
-
+        
         # Initialize Fitbit client
         self.client = fitbit.Fitbit(client_id=self.client_id,
                                     client_secret=self.client_secret,
