@@ -10,9 +10,6 @@ import json
 import dash
 import os
 
-import logging
-import logging.handlers
-
 
 PERIOD = '6m'  # 1d, 7d, 30d, 1w, 1m, 3m, 6m, 1y, or max
 RESOURCES = ['body/bmi',
@@ -126,7 +123,7 @@ def layout():
                         dcc.Graph(
                             id='body-weight',
                             figure=px.line(df.tail(30),
-                                           x=df.tail(30).index,
+                                           x='Date',
                                            y='Weight',
                                            title='Body Weight (Lbs)',
                                            line_shape='spline')
@@ -141,7 +138,7 @@ def layout():
                         dcc.Graph(
                             id='weight-delta',
                             figure=px.bar(df.tail(30),
-                                          x=df.tail(30).index,
+                                          x='Date',
                                           y='Delta',
                                           title='Daily Weight Loss/Gain (Lbs)')
                         ),
@@ -159,7 +156,7 @@ def layout():
                         dcc.Graph(
                             id='body-fat',
                             figure=px.line(df.tail(30),
-                                           x=df.tail(30).index,
+                                           x='Date',
                                            y='Fat',
                                            title='Body Fat (%)',
                                            line_shape='spline')
@@ -174,7 +171,7 @@ def layout():
                         dcc.Graph(
                             id='body-bmi',
                             figure=px.line(df.tail(30),
-                                           x=df.tail(30).index,
+                                           x='Date',
                                            y='Bmi',
                                            title='Body Mass Index (BMI)',
                                            line_shape='spline')
@@ -220,7 +217,6 @@ def layout():
         )]
     )
 
-print('WATERMELON')
 
 # Default template from utils/template.py
 pio.templates['dashboard'] = template
@@ -237,15 +233,4 @@ app.layout = layout
 
 
 if __name__ == '__main__':
-    my_logger = logging.getLogger('MyLogger')
-    my_logger.setLevel(logging.DEBUG)
-
-    handler = logging.handlers.SysLogHandler(address = '/dev/log')
-
-    my_logger.addHandler(handler)
-
-    my_logger.debug('this is debug')
-    my_logger.critical('this is critical')
-
-
     app.run_server(host='0.0.0.0', port=8080, debug=False)
