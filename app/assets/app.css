@@ -1,6 +1,6 @@
 body {
     margin: 2em;
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     color: rgb(50, 50, 50);
     background-color: rgb(242, 242, 242);
 }

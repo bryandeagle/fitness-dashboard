@@ -228,7 +228,8 @@ with open('config.json', 'rt') as f:
 
 # Use Bootstrap 5 and initiatlize app
 bootstrap = 'https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css'
-app = dash.Dash(__name__, external_stylesheets=[bootstrap])
+open_sans = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap'
+app = dash.Dash(__name__, external_stylesheets=[bootstrap, open_sans])
 app.layout = layout
 
 
