@@ -17,13 +17,14 @@ pip install -r requirements.txt
 
 ## Deploying
 
-Create a `secrets.json` in the working directory with the following format:
+Create a `config.json` in the working directory with the following format:
 
 ```json
 {
     "user_id": "",
     "client_id": "",
-    "client_secret": ""
+    "client_secret": "",
+    "redirect_uri": ""
 }
 ```
 
