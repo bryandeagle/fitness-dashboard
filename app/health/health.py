@@ -18,9 +18,6 @@ class OAuth:
         self.success_html =  """<meta http-equiv="refresh" content="5;URL=\'{}\'"/>
             <h1>Fitbit Authorization Successful</h1>
             <br/><h3>You will be redirected in 5 seconds</h3>""".format(redirect_uri)
-        self.success_html = """
-            <h1>You are now authorized to access the Fitbit API!</h1>
-            <br/><h3>You can close this window</h3>"""
         self.failure_html = """
             <h1>ERROR: %s</h1>%s"""
         self.fitbit = Fitbit(
@@ -31,9 +28,6 @@ class OAuth:
         )
         self.redirect_uri = redirect_uri
         self.url, _ = self.fitbit.client.authorize_token_url()
-
-        # Print url to the docker log
-        print(self.url)
 
         # Same with redirect_uri hostname and port
         cherrypy.config.update({'server.socket_host': '0.0.0.0',
@@ -59,8 +53,7 @@ class OAuth:
             except MismatchingStateError:
                 error = self._fmt_failure('CSRF Warning! Mismatching state')
         else:
-            return self.url
-            #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
+            return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
 
         self._shutdown_cherrypy()
         return error if error else self.success_html
