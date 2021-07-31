@@ -84,6 +84,24 @@ def layout():
                 dbc.Col(
                     html.Div(
                         dcc.Graph(
+                            id='body-weight',
+                            figure=px.line(df.tail(30),
+                                           x='Date',
+                                           y='Weight',
+                                           title='Body Weight (Lbs)',
+                                           line_shape='spline')
+                        ),
+                        className='card p-2'
+                    ),
+                    className='mb-2',
+                    width=12
+                )],
+                className='gx-2'
+            ),
+            dbc.Row([
+                dbc.Col(
+                    html.Div(
+                        dcc.Graph(
                             id='weight-delta',
                             figure=px.bar(df.tail(30),
                                           x='Date',
@@ -96,24 +114,6 @@ def layout():
                     width=12
                 )
                 ],
-                className='gx-2'
-            ),
-            dbc.Row([
-                dbc.Col(
-                    html.Div(
-                        dcc.Graph(
-                            id='body-weight-two',
-                            figure=px.line(df.tail(30),
-                                           x='Date',
-                                           y='Weight',
-                                           title='Body Weight (Lbs)',
-                                           line_shape='spline')
-                        ),
-                        className='card p-2'
-                    ),
-                    className='mb-2',
-                    width=12
-                )],
                 className='gx-2'
             )]
         )]
