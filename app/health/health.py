@@ -15,6 +15,7 @@ import sys
 class OAuth:
     def __init__(self, client_id, client_secret, redirect_uri):
         """ Initialize the FitbitOauth2Client """
+        self.success_html =  '<meta http-equiv="refresh" content="0;URL=\'https://fitness.home/\'"/>'
         self.success_html = """
             <h1>You are now authorized to access the Fitbit API!</h1>
             <br/><h3>You can close this window</h3>"""
@@ -40,15 +41,11 @@ class OAuth:
         cherrypy.quickstart(self)
 
     @cherrypy.expose
-    def index(self, state, code=None, error=None):
+    def index(self, state=cherrypy.engine.states.STARTED, code=None, error=None):
         """
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
         """
-        #if state is None and code is None:
-        #    #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
-        #    return self.url
-
         error = None
         if code:
             try:
@@ -61,7 +58,7 @@ class OAuth:
                 error = self._fmt_failure('CSRF Warning! Mismatching state')
         else:
             return self.url
-            #error = self._fmt_failure('Unknown error while authenticating')
+            #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
 
         self._shutdown_cherrypy()
         return error if error else self.success_html
