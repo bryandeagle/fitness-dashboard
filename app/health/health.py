@@ -40,7 +40,7 @@ class OAuth:
         cherrypy.quickstart(self)
 
     @cherrypy.expose
-    def index(self, state, code=None, error=None):
+    def index(self, state=cherrypy.engine.states.STARTED, code=None, error=None):
         """
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
