@@ -126,7 +126,6 @@ def layout():
                         ),
                         className='card p-2'
                     ),
-                    lg=6,
                     className='mb-2',
                     width=12
                 )],

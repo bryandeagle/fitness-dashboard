@@ -16,7 +16,7 @@ class OAuth:
     def __init__(self, client_id, client_secret, redirect_uri):
         """ Initialize the FitbitOauth2Client """
         self.success_html =  """<meta http-equiv="refresh" content="3;URL=\'{}\'"/>
-            <h3>You will be redirected in 3 seconds</h3>""".format(redirect_uri)
+            <h3>Initializing... You will be redirected in 3 seconds</h3>""".format(redirect_uri)
         self.failure_html = """
             <h1>ERROR: %s</h1>%s"""
         self.fitbit = Fitbit(
