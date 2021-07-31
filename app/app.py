@@ -117,7 +117,7 @@ def layout():
                 dbc.Col(
                     html.Div(
                         dcc.Graph(
-                            id='body-weight',
+                            id='body-weight-two',
                             figure=px.line(df.tail(30),
                                            x='Date',
                                            y='Weight',
