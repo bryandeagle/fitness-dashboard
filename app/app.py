@@ -1,4 +1,3 @@
-# coding=utf-8
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_core_components as dcc
@@ -224,6 +223,12 @@ pio.templates['dashboard'] = template
 pio.templates.default = 'dashboard'
 
 # Load config file an initialize Health API
+env_var = os.getenv('FITNESS_CONFIG')
+if env_var:
+    config_path = env_var
+else:
+    config_path = os.path.dirname(os.path.abspath(__file__))
+
 with open('config.json', 'rt') as f:
     health = Health(**json.load(f))
 

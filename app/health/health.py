@@ -5,14 +5,10 @@ from datetime import timedelta
 from fitbit.api import Fitbit
 from datetime import datetime
 import pandas as pd
-import webbrowser
 import threading
 import traceback
 import cherrypy
-import random
 import fitbit
-import json
-import json
 import sys
 
 
