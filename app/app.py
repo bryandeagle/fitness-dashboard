@@ -23,7 +23,7 @@ RESOURCES = ['body/bmi',
 template = dict(
     layout=go.Layout(
         dict(
-            height=200,
+            height=400,
             margin=dict(l=20, r=20, b=20, t=40),
             dragmode=False,
             hovermode='closest',
@@ -56,43 +56,6 @@ template = dict(
 )
 
 
-def calendar(data, column, weeks, title):
-    """ Heatmap calendar similar to Github's """
-    data = data.tail(7 * weeks)
-    x = [int(i.strftime('%V')) for i in data.Date]
-    y = [i.weekday() for i in data.Date]
-    text = [i.strftime('%m/%d') for i in data.Date]
-    data = [
-        go.Heatmap(
-            x=x,
-            y=y,
-            z=data[column],
-            text=text,
-            hoverinfo='text',
-            xgap=4,
-            ygap=4,
-            colorscale='Viridis'
-        )
-    ]
-    layout = go.Layout(
-        title=title,
-        yaxis=dict(
-            showgrid=False,
-            tickmode='array',
-            ticktext=['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'],
-            tickvals=[0, 1, 2, 3, 4, 5, 6],
-        ),
-        xaxis=dict(
-            title='',
-            tickmode='array',
-            tickvals=[],
-            showline=False
-        )
-    )
-    heatmap = go.Figure(data=data, layout=layout)
-    return heatmap
-
-
 def layout():
     """ Layout of the Dashboard """
     global health
@@ -109,7 +72,7 @@ def layout():
                 dbc.Col(
                     html.Div(
                         html.H4(
-                            '🏃‍♂️ Fitness Challenge 2021 Dashboard 🏋️‍♂️'
+                            '2021 Fitness Dashboard'
                         ),
                         className='card p-3'
                     ),
