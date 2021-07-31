@@ -27,10 +27,10 @@ class OAuth:
             timeout=10,
         )
         self.redirect_uri = redirect_uri
-        url, _ = self.fitbit.client.authorize_token_url()
+        self.url, _ = self.fitbit.client.authorize_token_url()
 
-        # Open the web browser in a new thread for command-line browser support
-        print(url)
+        # Print url to the docker log
+        print(self.url)
 
         # Same with redirect_uri hostname and port
         cherrypy.config.update({'server.socket_host': '0.0.0.0',
@@ -40,11 +40,14 @@ class OAuth:
         cherrypy.quickstart(self)
 
     @cherrypy.expose
-    def index(self, state, code=None, error=None):
+    def index(self, state=None, code=None, error=None):
         """
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
         """
+        if state is None:
+            return self.url
+        
         error = None
         if code:
             try:
