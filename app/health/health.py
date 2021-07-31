@@ -41,7 +41,7 @@ class OAuth:
         cherrypy.quickstart(self)
 
     @cherrypy.expose
-    def index(self, state=cherrypy.engine.states.STARTED, code=None, error=None):
+    def index(self, state=None, code=None, error=None):
         """
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
@@ -70,9 +70,8 @@ class OAuth:
 
     @staticmethod
     def _shutdown_cherrypy():
-        """ Shutdown cherrypy in one second, if it's running """
-        if cherrypy.engine.state == cherrypy.engine.states.STARTED:
-            threading.Timer(1, cherrypy.engine.exit).start()
+        """ Shutdown cherrypy in one second """
+        threading.Timer(1, cherrypy.engine.exit).start()
 
 
 class Health:
