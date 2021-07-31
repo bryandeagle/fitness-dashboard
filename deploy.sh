@@ -1,4 +1,4 @@
-docker rm -f fitness
+docker rm -f fitness > /dev/null
 docker build -q -t deagle/fitness:stable .
 mkdir -p /opt/fitness/config
 cp app/config.json /opt/fitness/config/
