@@ -45,9 +45,9 @@ class OAuth:
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
         """
-        if state is None and code is None:
-            #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
-            return self.url
+        #if state is None and code is None:
+        #    #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
+        #    return self.url
 
         error = None
         if code:
@@ -60,7 +60,8 @@ class OAuth:
             except MismatchingStateError:
                 error = self._fmt_failure('CSRF Warning! Mismatching state')
         else:
-            error = self._fmt_failure('Unknown error while authenticating')
+            return self.url
+            #error = self._fmt_failure('Unknown error while authenticating')
 
         self._shutdown_cherrypy()
         return error if error else self.success_html
