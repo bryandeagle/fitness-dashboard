@@ -19,7 +19,7 @@ class OAuth:
             <h1>You are now authorized to access the Fitbit API!</h1>
             <br/><h3>You can close this window</h3>"""
         self.failure_html = """
-            <h1>ERROR: %s</h1><br/><h3>You can close this window</h3>%s"""
+            <h1>ERROR: %s</h1>%s"""
         self.fitbit = Fitbit(
             client_id,
             client_secret,
@@ -40,7 +40,7 @@ class OAuth:
         cherrypy.quickstart(self)
 
     @cherrypy.expose
-    def index(self, state=None, code=None, error=None):
+    def index(self, state, code=None, error=None):
         """
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
