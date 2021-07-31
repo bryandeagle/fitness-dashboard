@@ -112,24 +112,6 @@ def layout():
                 )
                 ],
                 className='gx-2'
-            ),
-            dbc.Row([
-                dbc.Col(
-                    html.Div(
-                        dcc.Graph(
-                            id='body-weight-two',
-                            figure=px.line(df.tail(30),
-                                           x='Date',
-                                           y='Weight',
-                                           title='Body Weight (Lbs)',
-                                           line_shape='spline')
-                        ),
-                        className='card p-2'
-                    ),
-                    lg=6,
-                    className='mb-2'
-                )],
-                className='gx-2'
             )]
         )]
     )
