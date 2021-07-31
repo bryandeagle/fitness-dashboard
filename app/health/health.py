@@ -45,7 +45,7 @@ class OAuth:
         Receive a Fitbit response containing a verification code. Use the code
         to fetch the access_token.
         """
-        if state is None:
+        if state is None and code is None:
             #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
             return self.url
 
