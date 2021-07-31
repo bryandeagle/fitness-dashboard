@@ -46,8 +46,9 @@ class OAuth:
         to fetch the access_token.
         """
         if state is None:
-            return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
-        
+            #return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
+            return self.url
+
         error = None
         if code:
             try:
@@ -60,7 +61,7 @@ class OAuth:
                 error = self._fmt_failure('CSRF Warning! Mismatching state')
         else:
             error = self._fmt_failure('Unknown error while authenticating')
-        # Use a thread to shutdown cherrypy so we can return HTML first
+
         self._shutdown_cherrypy()
         return error if error else self.success_html
 
