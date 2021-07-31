@@ -4,8 +4,8 @@ mkdir -p /opt/fitness/config
 cp app/config.json /opt/fitness/config/
 docker run -d \
     --init \
-    --volume /opt/fitness/config:/config
-    --env FITNESS_CONFIG=/config
+    --volume /opt/fitness/config:/config \
+    --env FITNESS_CONFIG=/config \
     --name="fitness" \
     --restart always \
     --publish 127.0.0.1:5100:8080 \
