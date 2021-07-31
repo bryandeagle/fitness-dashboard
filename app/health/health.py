@@ -46,7 +46,7 @@ class OAuth:
         to fetch the access_token.
         """
         if state is None:
-            return self.url
+            return '<meta http-equiv="refresh" content="0;URL=\'{}\'"/>'.format(self.url)
         
         error = None
         if code:
