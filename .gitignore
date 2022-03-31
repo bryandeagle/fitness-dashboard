@@ -133,3 +133,6 @@ dmypy.json
 
 # Secrets file
 *.json
+
+# Certificates
+cert/
